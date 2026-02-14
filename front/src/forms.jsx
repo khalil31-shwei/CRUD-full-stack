@@ -2,18 +2,25 @@ import { useState } from "react";
 import axios from "axios";
 
 function Inputs() {
-const [Inputs, setInputs] = useState ({
+  const [inputs, setInputs] = useState({
     name: "",
     email: "",
-    password: ""
-});
-const handleChange = (e) =>setInputs({ ...Inputs,[e.target.name]: e.target.value }) 
-const handleSubmit = async (e) => {
+    password: "",
+    birthday: ""
+  });
+
+  const handleChange = (e) =>
+    setInputs({ ...inputs, [e.target.name]: e.target.value });
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/API/Inputs", Inputs);
+      const response = await axios.post(
+        "http://localhost:3000/API/db",
+        inputs
+      );
       console.log(response.data);
-      setInputs({ name: "", email: "", password: "" });
+      setInputs({ name: "", email: "", password: "", birthday: "" });
     } catch (error) {
       console.error("Error submitting form:", error);
     }
@@ -21,29 +28,51 @@ const handleSubmit = async (e) => {
 
   return (
     <form onSubmit={handleSubmit}>
-        <div>
-      <label htmlFor="name">Full Name:</label>
-      <input type="text" id="name" name="name" onChange={handleChange}/>
+      <div>
+        <label htmlFor="name">Full Name:</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value={inputs.name}
+          onChange={handleChange}
+        />
       </div>
 
       <div>
-<label htmlFor="birthday">Birthday:</label>
-<input type="date" id="birthday" name="birthday" onChange={handleChange}        />
-</div>
+        <label htmlFor="birthday">Birthday:</label>
+        <input
+          type="date"
+          id="birthday"
+          name="birthday"
+          value={inputs.birthday}
+          onChange={handleChange}
+        />
+      </div>
 
-<div>
-<label htmlFor="email">Email:</label>
-<input type="email" id="email" name="email" onChange={handleChange}/>
-</div>
+      <div>
+        <label htmlFor="email">Email:</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          value={inputs.email}
+          onChange={handleChange}
+        />
+      </div>
 
-<div>
-<label htmlFor="password">Password:</label>
-<input type="password" id="password" name="password" onChange={handleChange}        />
-</div>
+      <div>
+        <label htmlFor="password">Password:</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          value={inputs.password}
+          onChange={handleChange}
+        />
+      </div>
 
-
-
-<button type="submit">Submit</button>
+      <button type="submit">Submit</button>
     </form>
   );
 }
