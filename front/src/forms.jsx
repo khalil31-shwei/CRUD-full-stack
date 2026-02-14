@@ -19,6 +19,25 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+     if (!inputs.username || !inputs.email || !inputs.password || !inputs.birthday) {
+      setError("All fields are required ");
+      setMessage("");
+      return;
+    }
+
+    if (inputs.password.length < 6) {
+      setError("Password must be at least 6 characters ");
+      setMessage("");
+      return;
+    }
+
+    if (!inputs.email.includes("@")) {
+      setError("Invalid email format ");
+      setMessage("");
+      return;
+    }
+
+
     try {
       const response = await axios.post(
         "http://localhost:3000/API/register",

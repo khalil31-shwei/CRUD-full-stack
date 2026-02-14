@@ -12,11 +12,7 @@ app.get('/users', (req, res) => {
   res.json(users);
 });
 
-app.post("/API/db", (req, res) => {
-  const newUser = req.body;
-  users.push(newUser);
-  res.json({ message: "User added successfully", user: newUser });
-});
+
 
 //register user
 
