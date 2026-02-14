@@ -1,80 +1,95 @@
 import { useState } from "react";
 import axios from "axios";
 
-function Inputs() {
+function Register() {
   const [inputs, setInputs] = useState({
-    name: "",
+    username: "",
     email: "",
     password: "",
     birthday: ""
   });
 
-  const handleChange = (e) =>
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+
+  const handleChange = (e) => {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const response = await axios.post(
-        "http://localhost:3000/API/db",
+        "http://localhost:3000/API/register",
         inputs
       );
-      console.log(response.data);
-      setInputs({ name: "", email: "", password: "", birthday: "" });
-    } catch (error) {
-      console.error("Error submitting form:", error);
+
+      // Show success message from backend
+      setMessage(response.data.message);
+      setError("");
+
+      // Reset form
+      setInputs({
+        username: "",
+        email: "",
+        password: "",
+        birthday: ""
+      });
+
+    } catch (err) {
+      
+      if (err.response) {
+        setError(err.response.data.message);
+      } else {
+        setError("Server error ");
+      }
+      setMessage("");
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="name">Full Name:</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          value={inputs.name}
-          onChange={handleChange}
-        />
-      </div>
+      <input
+        type="text"
+        name="username"
+        placeholder="Username"
+        value={inputs.username}
+        onChange={handleChange}
+      />
 
-      <div>
-        <label htmlFor="birthday">Birthday:</label>
-        <input
-          type="date"
-          id="birthday"
-          name="birthday"
-          value={inputs.birthday}
-          onChange={handleChange}
-        />
-      </div>
+      <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        value={inputs.email}
+        onChange={handleChange}
+      />
 
-      <div>
-        <label htmlFor="email">Email:</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          value={inputs.email}
-          onChange={handleChange}
-        />
-      </div>
+      <input
+        type="password"
+        name="password"
+        placeholder="Password"
+        value={inputs.password}
+        onChange={handleChange}
+      />
 
-      <div>
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          value={inputs.password}
-          onChange={handleChange}
-        />
-      </div>
+      <input
+        type="date"
+        name="birthday"
+        value={inputs.birthday}
+        onChange={handleChange}
+      />
 
-      <button type="submit">Submit</button>
+      <button type="submit">Register</button>
+
+      
+      {message && <p style={{ color: "green" }}>{message}</p>}
+
+     
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </form>
   );
 }
 
-export default Inputs;
+export default Register;
